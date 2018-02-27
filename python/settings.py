@@ -27,13 +27,40 @@ class Config():
 
     CACHE_DIRECTORY = iniparser.get('cache', 'directory')
 
+    HOME_DIR = os.environ['HOME']
+
     '''
     Open Targets Scoring Matrices
     '''
 
     SCORE_FILE_URLS = dict(
-        datasource_scores='https://storage.googleapis.com/biodata-west-hackathon/matrix_datasources_17.12.csv',
-        datatype_scores='https://storage.googleapis.com/biodata-west-hackathon/matrix_datatypes_17.12.csv'
+        datasource_scores='https://storage.googleapis.com/biodata-west-hackathon/draft/matrix_datasources_17.12.csv',
+        datatype_scores='https://storage.googleapis.com/biodata-west-hackathon/draft/matrix_datatypes_17.12.csv',
+        output_datasource_scores=os.path.join(os.path.sep, HOME_DIR,'gene_disease_associations_datasource.csv'),
+        output_datasource_scores_nodrugs = os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datasource_nodrugs.csv'),
+        output_datatype_scores = os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatype.csv'),
+        output_datatype_scores_nodrugs = os.path.join(os.path.sep, HOME_DIR,'gene_disease_associations_datatype_nodrugs.csv')
+
+    )
+
+    GENE_ANNOTATION_FILES = dict(
+        hgnc_mappings='https://storage.googleapis.com/biodata-west-hackathon/draft/hgnc_mapping.csv',
+        go_annotations='https://storage.googleapis.com/biodata-west-hackathon/draft/human_goa.csv',
+        protein_classes='https://storage.googleapis.com/biodata-west-hackathon/draft/human_protein_classes.csv',
+        output_gene_info=os.path.join(os.path.sep, HOME_DIR,'gene_info.csv')
+    )
+
+    GENE_TISSUE_EXPRESSION = dict(
+        gtex='https://storage.googleapis.com/biodata-west-hackathon/draft/EFO_MeSH_GTExTissue_Genes_14Feb2018_list.txt',
+        disease_location='https://storage.googleapis.com/biodata-west-hackathon/draft/disease_locations.txt',
+        output_tissue_expression=os.path.join(os.path.sep, HOME_DIR,'gene_disease_gtex_tissue_expression.csv'),
+        output_disease_location = os.path.join(os.path.sep, HOME_DIR, 'disease_uberon_location.csv')
+    )
+
+
+    PHARMAPROJECTS = dict(
+        original_file=os.path.join(os.path.sep, HOME_DIR,'Pprojects_8_5_2017_for_BDW.csv'),
+        output_pharmaprojects=os.path.join(os.path.sep, HOME_DIR,'Pprojects_drugs.csv'),
     )
 
 
