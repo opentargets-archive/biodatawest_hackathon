@@ -23,7 +23,7 @@ https://console.cloud.google.com/storage/browser/biodata-west-hackathon/version1
  
  * PharmaProjects gene indication pairs: Pprojects_drugs.csv
  	- Note this data is interpreted from Pharmaprojects XML output (as of 5Aug2017) and cannot be kept in any form beyond the period of this workshop. Errors in interpretation may have occurred.
-        - Target_Indication: merge of Ensembl|EFO IDs 
+	- Target_Indication: merge of Ensembl|EFO IDs 
 	- Ensembl ID: target identifier (ENSEMBL)
 	- EFO_ID: disease identifier (EFO)
 	- EntrezGeneID: target identifier (EntrezGene)
