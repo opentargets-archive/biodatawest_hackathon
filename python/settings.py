@@ -33,27 +33,48 @@ class Config():
     Open Targets Scoring Matrices
     '''
 
-    SCORE_FILE_URLS = dict(
+    DRAFT_SCORE_FILE_URLS = dict(
         datasource_scores='https://storage.googleapis.com/biodata-west-hackathon/draft/matrix_datasources_17.12.csv',
         datatype_scores='https://storage.googleapis.com/biodata-west-hackathon/draft/matrix_datatypes_17.12.csv',
-        output_datasource_scores=os.path.join(os.path.sep, HOME_DIR,'gene_disease_associations_datasource.csv'),
-        output_datasource_scores_nodrugs = os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datasource_nodrugs.csv'),
-        output_datatype_scores = os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatype.csv'),
-        output_datatype_scores_nodrugs = os.path.join(os.path.sep, HOME_DIR,'gene_disease_associations_datatype_nodrugs.csv')
+    )
 
+    VERSION1_SCORE_FILES = dict(
+        output_datasource_scores=os.path.join(os.path.sep, HOME_DIR,'gene_disease_associations_datasource.csv'),
+        #output_datasource_scores_nodrugs = os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datasource_nodrugs.csv'),
+        output_datatype_scores = os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatype.csv'),
+        #output_datatype_scores_nodrugs = os.path.join(os.path.sep, HOME_DIR,'gene_disease_associations_datatype_nodrugs.csv')
+
+    )
+
+    VERSION2_SCORE_FILES = dict(
+        output_datasource_scores=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datasource_with_expression.csv'),
+        output_datatype_scores=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatype_with_expression.csv'),
+    )
+
+    MERGED_FILES = dict(
+        output_datasource_scores=os.path.join(os.path.sep, HOME_DIR, 'gene_expression_disease_associations_datasource.csv'),
+        output_datasource_scores_nodrugs=os.path.join(os.path.sep, HOME_DIR,
+                                                      'gene_expression_disease_associations_datasource_nodrugs.csv'),
+        output_datatype_scores=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatype.csv'),
+        output_datatype_scores_nodrugs=os.path.join(os.path.sep, HOME_DIR,
+                                                    'gene_expression_disease_associations_datatype_nodrugs.csv'),
+        output_datasource_scores_expression=os.path.join(os.path.sep, HOME_DIR, 'gene_expression_disease_associations_datasource_v2.csv'),
     )
 
     GENE_ANNOTATION_FILES = dict(
         hgnc_mappings='https://storage.googleapis.com/biodata-west-hackathon/draft/hgnc_mapping.csv',
         go_annotations='https://storage.googleapis.com/biodata-west-hackathon/draft/human_goa.csv',
         protein_classes='https://storage.googleapis.com/biodata-west-hackathon/draft/human_protein_classes.csv',
-        output_gene_info=os.path.join(os.path.sep, HOME_DIR,'gene_info.csv')
+        qtq=os.path.join(os.path.sep, HOME_DIR,'QTQ_targetevidence_31Jan2018.csv'),
+        output_gene_info=os.path.join(os.path.sep, HOME_DIR,'gene_info.csv'),
+        output_gene_info_qtq=os.path.join(os.path.sep, HOME_DIR,'gene_info_qtq.csv'),
     )
 
     GENE_TISSUE_EXPRESSION = dict(
         gtex='https://storage.googleapis.com/biodata-west-hackathon/draft/EFO_MeSH_GTExTissue_Genes_14Feb2018_list.txt',
         disease_location='https://storage.googleapis.com/biodata-west-hackathon/draft/disease_locations.txt',
         output_tissue_expression=os.path.join(os.path.sep, HOME_DIR,'gene_disease_gtex_tissue_expression.csv'),
+        output_tissue_expression_withscore=os.path.join(os.path.sep, HOME_DIR,'gene_disease_gtex_tissue_expression_v2.csv'),
         output_disease_location = os.path.join(os.path.sep, HOME_DIR, 'disease_uberon_location.csv')
     )
 

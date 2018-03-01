@@ -1,6 +1,7 @@
 import sys
 import os
 import pandas as pd
+import math
 import numpy as np
 import logging
 import csv
@@ -101,6 +102,74 @@ def merge_tissue_expression_location():
     print(df.loc[df['symbol'] == 'NOD2'])
     df.to_csv(Config.GENE_TISSUE_EXPRESSION['output_tissue_expression'])
 
+
+def calculate_expression_levels():
+
+    df = pd.read_csv(Config.GENE_TISSUE_EXPRESSION['output_tissue_expression'], index_col=0)
+    print(len(df))
+    formula = lambda x: "%.2f"%(1 - (1 /math.sqrt(x/ 5)))
+    df = df.assign(expression_score=df['max_fold_change'].apply(formula))
+    print(len(df))
+    df.to_csv(Config.GENE_TISSUE_EXPRESSION['output_tissue_expression_withscore'])
+
+    # drop the disease label
+    df = df.drop('disease_label', 1)
+
+    # merge the evidence with the expression
+    # select the distinct diseases from the file and get the relevant tissues
+    for key, filename in Config.VERSION1_SCORE_FILES.iteritems():
+
+        print("Reading original %s"%filename)
+        dt_df = pd.read_csv(filename, index_col=0)
+
+        '''
+        tissue_label,source,max_fold_change,expression_score
+        new_column = []
+        idx =
+        dt_df.insert(idx, 'tissue_label', value)
+        '''
+        print(len(dt_df))
+        #dt_df['tissue_label'] = np.nan
+        # pd.DataFrame(np.zeros((len(dt_df), 1)))
+        #dt_df['max_fold_change'] = np.zeros((len(dt_df), 1))
+        #dt_df['expression_score'] = np.zeros((len(dt_df), 1))
+
+
+        merged_df = pd.merge(dt_df, df, how='left', on=['entrez_id', 'ensembl_gene_id', 'disease_id', 'symbol'])
+        cond1 = merged_df['expression_score'] >= 0
+        #print(merged_df[cond1])
+        print(len(merged_df), len(merged_df[cond1]))
+        merged_df['max_fold_change'].fillna(0, inplace=True)
+        merged_df['expression_score'].fillna(0, inplace=True)
+        merged_df['tissue_label'].fillna('Unspecified', inplace=True)
+        merged_df['source'].fillna('Unspecified', inplace=True)
+        print(merged_df)
+        print(merged_df[cond1])
+
+        merged_df.to_csv(Config.VERSION2_SCORE_FILES[key])
+
+def merge_QTQ():
+
+    # read gene info again
+    df = pd.read_csv(Config.GENE_ANNOTATION_FILES['output_gene_info'], index_col=0)
+    print(df)
+    qtq_df = pd.read_csv(Config.GENE_ANNOTATION_FILES['qtq'])
+    # ENSEMBL_ID,TargetClass,Topology_Type,Target_Location,ExAC_LoF,% human query gene identical to target Mouse gene,GTEX_median_all_tissues
+    qtq_df = qtq_df.rename(columns={
+                                      'ENSEMBL_ID': 'ensembl_gene_id',
+        'TargetClass': 'target_class',
+        'Topology_Type': 'topology_type',
+        'Target_Location': 'target_location',
+        '% human query gene identical to target Mouse gene': 'pc_mouse_gene_identity',
+    })
+
+    # rename
+    # select the column we need
+    qtq_filtered= qtq_df[['ensembl_gene_id', 'target_class', 'topology_type', 'target_location', 'ExAC_LoF', 'pc_mouse_gene_identity', 'GTEX_median_all_tissues', 'description' ]]
+    df = pd.merge(df, qtq_filtered, how='left', on=['ensembl_gene_id'])
+    df.to_csv(Config.GENE_ANNOTATION_FILES['output_gene_info_qtq'])
+
+
 def clean_disease_location():
     '''
     Read disease location and simplify
@@ -119,7 +188,7 @@ def parse_scoring_matrices():
     entrez_df = hgnc_df[['ensembl_gene_id', 'entrez_id']]
 
 
-    df = pd.read_csv(Config.SCORE_FILE_URLS['datasource_scores'])
+    df = pd.read_csv(Config.DRAFT_SCORE_FILE_URLS['datasource_scores'])
     '''
     rename columns
     EnsemblId	Symbol	OntologyId	Label	Is direct	overall	expression_atlas	uniprot	gwas_catalog	phewas_catalog	eva	uniprot_literature	genomics_england	gene2phenotype	reactome	slapenrich	phenodigm	cancer_gene_census	eva_somatic	uniprot_somatic	intogen	chembl	europepmc
@@ -139,13 +208,13 @@ def parse_scoring_matrices():
     print(cols)
     df = df[cols]
     hgnc_df['entrez_id'].astype(str)
-    df.to_csv(Config.SCORE_FILE_URLS['output_datasource_scores'])
+    df.to_csv(Config.DRAFT_SCORE_FILE_URLS['output_datasource_scores'])
     # remove drug info from ChEMBL and overall score
     df = df.drop('chembl', 1)
     df = df.drop('overall_score', 1)
-    df.to_csv(Config.SCORE_FILE_URLS['output_datasource_scores_nodrugs'])
+    df.to_csv(Config.DRAFT_SCORE_FILE_URLS['output_datasource_scores_nodrugs'])
 
-    df = pd.read_csv(Config.SCORE_FILE_URLS['datatype_scores'])
+    df = pd.read_csv(Config.DRAFT_SCORE_FILE_URLS['datatype_scores'])
     cols = df.columns.tolist()
     print(cols)
 
@@ -167,10 +236,10 @@ def parse_scoring_matrices():
     print(cols)
     df = df[cols]
     hgnc_df['entrez_id'].astype(str)
-    df.to_csv(Config.SCORE_FILE_URLS['output_datatype_scores'])
+    df.to_csv(Config.DRAFT_SCORE_FILE_URLS['output_datatype_scores'])
     df = df.drop('known_drug', 1)
     df = df.drop('overall_score', 1)
-    df.to_csv(Config.SCORE_FILE_URLS['output_datatype_scores_nodrugs'])
+    df.to_csv(Config.DRAFT_SCORE_FILE_URLS['output_datatype_scores_nodrugs'])
 
 def parse_pharmaprojects():
     df = pd.read_csv(Config.PHARMAPROJECTS['original_file'])
@@ -182,6 +251,20 @@ def parse_pharmaprojects():
     print(df[:10])
     df.to_csv(Config.PHARMAPROJECTS['output_pharmaprojects'])
 
+
+def merge_expression_to_associations():
+
+    exp_df = pd.read_csv(Config.GENE_TISSUE_EXPRESSION['output_tissue_expression'])
+
+    for k, filename in Config.VERSION1_SCORE_FILES.iteritems():
+        print(filename)
+        output = filename.replace('gene_disease', 'gene_expression_disease')
+        df = pd.read_csv(filename)
+        df = pd.merge(df, exp_df, how='left', on=['entrez_id','ensembl_gene_id','disease_id'])
+        print(df)
+        return
+
+
 def main():
 
     logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.INFO)
@@ -190,7 +273,10 @@ def main():
     #merge_tissue_expression_location()
     #clean_disease_location()
     #parse_scoring_matrices()
-    parse_pharmaprojects()
+    #parse_pharmaprojects()
+    #merge_expression_to_associations()
+    calculate_expression_levels()
+    #merge_QTQ()
     
 
 
