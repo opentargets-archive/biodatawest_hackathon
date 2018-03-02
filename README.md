@@ -38,33 +38,34 @@ https://console.cloud.google.com/storage/browser/biodata-west-hackathon/version1
 	
  * Gene disease associations per datatype (with and without drugs): gene_disease_associations_datatype.csv, gene_disease_associations_datatype_nodrugs.csv
  * Gene disease associations per datasource (with and without ChEMBL scores):  gene_disease_associations_datasource_with_expression.csv
+ 
 | Column name         | Description |
 | --------------------|-------------|
-| entrez_id      | Entrez gene identifier |
-| ensembl_gene_id      | Ensembl gene identifier |
-| symbol | gene symbol |
-| disease_id | disease identifier |
-|disease_label| disease name |
-|direct_association| Is the association drawn from a direct evidence or propagated based on the disease classification? |
-|overall_score| overall score of the association (aggregate the others) |
-|expression_atlas| Expression Atlas association score
-|uniprot| UniProt genetic score |
-|gwas_catalog| GWAS Catalog genetic score |
-|phewas_catalog| PheWAS Catalog genetic score |
-|eva| EVA (ClinVar) genetic score |
-|uniprot_literature| UniProt literature curated genetic score |
-|genomics_england| Genomics England PanelApp genetic score |
-|gene2phenotype| Gene2Phenotype genetic score |
-|reactome| Reactome affected pathways score |
-|slapenrich| SlapEnrich cancer affected pathways score |
-|phenodigm| Phenodigm (Animal model) score |
-|cancer_gene_census| Cancer Gene Census score |
-|eva_somatic| EVA (ClinVar) somatic mutations score |
-|uniprot_somatic| UniProt somatic mutations score |
-|intogen| InToGEN cancer driver gene score |
-|chembl| ChEMBL clinical trial score |
-|europepmc| EuroPMC literature score |
-|tissue_label| Relevant tissue name when known |
-|source| GTEx v6 |
-|max_fold_change| gene expression fold change (if mRNA expression in the indicated tissue for this gene is at least 5-fold above the median tissue and within 5-fold of the highest expression tissue) |
+| entrez_id           | Entrez gene identifier |
+| ensembl_gene_id     | Ensembl gene identifier |
+| symbol              | gene symbol |
+| disease_id          | disease identifier |
+| disease_label       | disease name |
+| direct_association  | Is the association drawn from a direct evidence or propagated based on the disease classification? |
+| overall_score       | overall score of the association (aggregate the others) |
+| expression_atlas    | Expression Atlas association score
+| uniprot             | UniProt genetic score |
+| gwas_catalog        | GWAS Catalog genetic score |
+| phewas_catalog      | PheWAS Catalog genetic score |
+| eva| EVA (ClinVar) genetic score |
+| uniprot_literature| UniProt literature curated genetic score |
+| genomics_england| Genomics England PanelApp genetic score |
+| gene2phenotype| Gene2Phenotype genetic score |
+| reactome| Reactome affected pathways score |
+| slapenrich| SlapEnrich cancer affected pathways score |
+| phenodigm| Phenodigm (Animal model) score |
+| cancer_gene_census| Cancer Gene Census score |
+| eva_somatic| EVA (ClinVar) somatic mutations score |
+| uniprot_somatic| UniProt somatic mutations score |
+| intogen| InToGEN cancer driver gene score |
+| chembl| ChEMBL clinical trial score |
+| europepmc| EuroPMC literature score |
+| tissue_label| Relevant tissue name when known |
+| source| GTEx v6 |
+| max_fold_change| gene expression fold change (if mRNA expression in the indicated tissue for this gene is at least 5-fold above the median tissue and within 5-fold of the highest expression tissue) |
 | expression_score | normalised gene expression score for max_fold_change | 
