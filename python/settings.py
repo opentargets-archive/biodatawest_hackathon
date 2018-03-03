@@ -80,8 +80,9 @@ class Config():
 
 
     PHARMAPROJECTS = dict(
-        original_file=os.path.join(os.path.sep, HOME_DIR,'Pprojects_8_5_2017_for_BDW.csv'),
-        output_pharmaprojects=os.path.join(os.path.sep, HOME_DIR,'Pprojects_drugs.csv'),
+        original_file=os.path.join(os.path.sep, HOME_DIR,'Pprojects_8_5_2017_for_BDW_v2.csv'),
+        output_pharmaprojects=os.path.join(os.path.sep, HOME_DIR,'Pprojects_drugs_TTlabel.csv'),
+        output_opentargets_pharmaprojects=os.path.join(os.path.sep, HOME_DIR,'OpenTargets_Pprojects_drugs_TTlabel.csv'),
     )
 
 

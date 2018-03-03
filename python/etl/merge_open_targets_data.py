@@ -264,6 +264,15 @@ def merge_expression_to_associations():
         print(df)
         return
 
+def generate_short_excel_version():
+
+    # combine Evidence from OpenTargets_PharmaProjects in single file
+    pp_df = pd.read_csv(Config.PHARMAPROJECTS['output_pharmaprojects'], index_col=0)
+
+    ot_dt_df = pd.read_csv(Config.VERSION2_SCORE_FILES['output_datatype_scores'], index_col=0)
+    df = pd.merge(pp_df, ot_dt_df, how='inner', on=['entrez_id', 'ensembl_gene_id', 'disease_id'])
+    df.to_csv(Config.PHARMAPROJECTS['output_opentargets_pharmaprojects'])
+
 
 def main():
 
@@ -275,8 +284,10 @@ def main():
     #parse_scoring_matrices()
     #parse_pharmaprojects()
     #merge_expression_to_associations()
-    calculate_expression_levels()
+    #calculate_expression_levels()
     #merge_QTQ()
+    #parse_pharmaprojects()
+    generate_short_excel_version()
     
 
 
