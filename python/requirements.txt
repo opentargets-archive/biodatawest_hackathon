@@ -2,3 +2,6 @@ numpy
 scipy
 pandas
 scikit-learn
+tabulate>=0.8.2
+matplotlib
+jupyter

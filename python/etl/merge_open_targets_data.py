@@ -179,7 +179,8 @@ def clean_disease_location():
     df = df[['disease_id', 'disease_location_id', 'disease_location_label']]
     print(df[:10])
     df.to_csv(Config.GENE_TISSUE_EXPRESSION['output_disease_location'])
-
+    toto = list()
+    toto.inde
 def parse_scoring_matrices():
 
     hgnc_df = pd.read_csv(Config.GENE_ANNOTATION_FILES['hgnc_mappings'], sep='\t')
@@ -187,19 +188,21 @@ def parse_scoring_matrices():
     hgnc_df['uniprot_id'].astype(str)
     entrez_df = hgnc_df[['ensembl_gene_id', 'entrez_id']]
 
-
     df = pd.read_csv(Config.DRAFT_SCORE_FILE_URLS['datasource_scores'])
+
     '''
     rename columns
     EnsemblId	Symbol	OntologyId	Label	Is direct	overall	expression_atlas	uniprot	gwas_catalog	phewas_catalog	eva	uniprot_literature	genomics_england	gene2phenotype	reactome	slapenrich	phenodigm	cancer_gene_census	eva_somatic	uniprot_somatic	intogen	chembl	europepmc
+    '''
     '''
     df = df.rename(columns={
                             'EnsemblId': 'ensembl_gene_id',
                             'Symbol': 'symbol',
                             'OntologyId': 'disease_id',
                             'Label': 'disease_label',
-                            'Is direct': 'direct_association',
+                            'Is direct': 'is_direct',
                             'overall': 'overall_score'})
+    '''
 
     df = pd.merge(df, entrez_df, how='left', on=['ensembl_gene_id'])
     cols = df.columns.tolist()
@@ -242,27 +245,62 @@ def parse_scoring_matrices():
     df.to_csv(Config.DRAFT_SCORE_FILE_URLS['output_datatype_scores_nodrugs'])
 
 def parse_pharmaprojects():
-    df = pd.read_csv(Config.PHARMAPROJECTS['original_file'])
-    df = df.drop('Target_Indication', 1)
+    df = pd.read_csv(Config.PHARMAPROJECTS['original_ttlabel'])
+    # how many rows
+    print(len(df))
     df = df.rename(columns={
+        'Target_Indication' : 'target_indication',
         'Ensembl_ID': 'ensembl_gene_id',
         'EntrezGeneID': 'entrez_id',
         'EFO_ID': 'disease_id'})
+    col = df.target_indication.str.replace("|", "-")
+    df['target_indication'] = col
     print(df[:10])
-    df.to_csv(Config.PHARMAPROJECTS['output_pharmaprojects'])
+    df.to_csv(Config.PHARMAPROJECTS['output_pharmaprojects'], index=False)
 
 
 def merge_expression_to_associations():
 
-    exp_df = pd.read_csv(Config.GENE_TISSUE_EXPRESSION['output_tissue_expression'])
+    # ,entrez_id,ensembl_gene_id,symbol,disease_id,disease_label,tissue_label,source,max_fold_change"
+    exp_df = pd.read_csv(Config.GENE_TISSUE_EXPRESSION['output_tissue_expression_withscore'], index_col=0)
 
-    for k, filename in Config.VERSION1_SCORE_FILES.iteritems():
-        print(filename)
-        output = filename.replace('gene_disease', 'gene_expression_disease')
-        df = pd.read_csv(filename)
-        df = pd.merge(df, exp_df, how='left', on=['entrez_id','ensembl_gene_id','disease_id'])
-        print(df)
-        return
+    entrez_df = pd.read_csv(Config.GENE_ANNOTATION_FILES['output_gene_info_qtq'], index_col=0)
+    entrez_df = entrez_df[['symbol','ensembl_gene_id','entrez_id']].drop_duplicates()
+    print(entrez_df)
+
+    for k, filename in Config.DRAFT_SCORE_FILE_URLS.iteritems():
+        output = Config.VERSION2_SCORE_FILES[k]
+        print(filename, output)
+        df = pd.read_csv(filename, sep=',', index_col=False)
+        #print(df[0:5])
+        headers = list(df.columns.values)
+        print(headers)
+        print(df['key'])
+
+        df = pd.merge(df, entrez_df, how='left', on=['ensembl_gene_id', 'symbol'])
+        df = pd.merge(df, exp_df, how='left', on=['ensembl_gene_id','symbol', 'entrez_id', 'disease_id'])
+        headers = list(df.columns.values)
+        print(df[df['max_fold_change'] > 0 ])
+        print(headers)
+        print(headers[7:-6])
+        print(headers[-4:])
+
+        df['max_fold_change'].fillna(0, inplace=True)
+        df['expression_score'].fillna(0, inplace=True)
+        df['tissue_label'].fillna('Unspecified', inplace=True)
+        df['source'].fillna('Unspecified', inplace=True)
+
+        df.drop('disease_label_y', 1)
+        df = df.rename(columns={'disease_label_x': 'disease_label' })
+        cols = ['key', 'entrez_id', 'ensembl_gene_id', 'symbol', 'disease_id', 'disease_label', 'therapeutic_area', 'is_direct' ]
+        cols.extend(headers[7:-6])
+        cols.extend(headers[-4:])
+        print(cols)
+        # ['key', 'ensembl_gene_id', 'symbol', 'disease_id', 'disease_label_x', 'therapeutic_area', 'is_direct', 'expression_atlas', 'uniprot', 'gwas_catalog', 'phewas_catalog', 'eva', 'uniprot_literature', 'genomics_england', 'gene2phenotype', 'reactome', 'slapenrich', 'phenodigm', 'cancer_gene_census', 'eva_somatic', 'uniprot_somatic', 'intogen', 'chembl', 'europepmc', 'entrez_id', 'disease_label_y', 'tissue_label', 'source', 'max_fold_change']
+        df2 = df[cols]
+        print(df2)
+        df2.to_csv(output, index=False)
+
 
 def generate_short_excel_version():
 
@@ -286,8 +324,9 @@ def main():
     #merge_expression_to_associations()
     #calculate_expression_levels()
     #merge_QTQ()
+    merge_expression_to_associations()
     #parse_pharmaprojects()
-    generate_short_excel_version()
+    #generate_short_excel_version()
     
 
 

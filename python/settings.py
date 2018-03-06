@@ -34,8 +34,8 @@ class Config():
     '''
 
     DRAFT_SCORE_FILE_URLS = dict(
-        datasource_scores='https://storage.googleapis.com/biodata-west-hackathon/draft/matrix_datasources_17.12.csv',
-        datatype_scores='https://storage.googleapis.com/biodata-west-hackathon/draft/matrix_datatypes_17.12.csv',
+        gene_disease_associations_datasources=os.path.join(os.path.sep, HOME_DIR,'matrix_datasources_18.02.csv'),
+        gene_disease_associations_datatypes=os.path.join(os.path.sep, HOME_DIR,'matrix_datatypes_18.02.csv'),
     )
 
     VERSION1_SCORE_FILES = dict(
@@ -47,8 +47,8 @@ class Config():
     )
 
     VERSION2_SCORE_FILES = dict(
-        output_datasource_scores=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datasource_with_expression.csv'),
-        output_datatype_scores=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatype_with_expression.csv'),
+        gene_disease_associations_datasources=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datasources_with_expression.csv'),
+        gene_disease_associations_datatypes=os.path.join(os.path.sep, HOME_DIR, 'gene_disease_associations_datatypes_with_expression.csv'),
     )
 
     MERGED_FILES = dict(
@@ -81,6 +81,7 @@ class Config():
 
     PHARMAPROJECTS = dict(
         original_file=os.path.join(os.path.sep, HOME_DIR,'Pprojects_8_5_2017_for_BDW_v2.csv'),
+        original_ttlabel=os.path.join(os.path.sep, HOME_DIR,'Pprojects_drugs_TTlabel_original.csv'),
         output_pharmaprojects=os.path.join(os.path.sep, HOME_DIR,'Pprojects_drugs_TTlabel.csv'),
         output_opentargets_pharmaprojects=os.path.join(os.path.sep, HOME_DIR,'OpenTargets_Pprojects_drugs_TTlabel.csv'),
     )
