@@ -1,12 +1,13 @@
 # biodatawest_hackathon
-Python and R Code and documentation for the BioData West 2018 hackathon
+Datasets, python and R Code and documentation for the BioData West 2018 hackathon
 
-### Files
+## Access to the datasets
 
-```
-https://console.cloud.google.com/storage/browser/biodata-west-hackathon/version1/?project=open-targets
-```
+The description of the datasets can be found [in the Wiki](https://github.com/opentargets/biodatawest_hackathon/wiki/Open-Targets-hackathon-datasets-description) with a link to each file.
 
-The description of the datasets can be found [in the Wiki](https://github.com/opentargets/biodatawest_hackathon/wiki/Open-Targets-hackathon-datasets-description)
+## Jupyter Notebooks
+
+[Python Notebook Example](https://github.com/opentargets/biodatawest_hackathon/blob/master/python/notebooks/Random%20Forest%20Classifier%20Example.ipynb)
+[R Notebook Example](https://github.com/opentargets/biodatawest_hackathon/blob/master/R/OpenTargetsDatathonRNotebook.ipynb)
 
 
